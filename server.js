@@ -16,10 +16,21 @@ const app = express();
 const PORT = process.env.PORT || 5050;
 
 // ✅ Middlewares - Place CORS and JSON parser first
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://client-5yhfrth0g-mohameds-projects-7178de3c.vercel.app'
+];
+
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, Postman, curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
+
 app.use(express.json());
 
 // ✅ Route Middlewares
@@ -29,7 +40,7 @@ app.use('/api/admin', adminRoute);
 app.use('/api/profile', profileRoute);
 app.use('/api/users', userRoute);
 app.use('/api/requests', approvalRequestRoutes);
-app.use('/api/messages', messageRoutes); // ✅ Now after CORS + JSON
+app.use('/api/messages', messageRoutes);
 
 // Test route
 app.get('/', (req, res) => {
