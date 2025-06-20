@@ -19,18 +19,22 @@ const PORT = process.env.PORT || 5050;
 const allowedOrigins = [
   'http://localhost:3000',
   'https://client-5yhfrth0g-mohameds-projects-7178de3c.vercel.app',
+  'https://aptmeuble.com',
   'https://www.aptmeuble.com'
 ];
 
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps, Postman, curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    return callback(new Error('Not allowed by CORS'));
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.error('❌ Blocked by CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
   },
   credentials: true
 }));
+
 
 app.use(express.json());
 
