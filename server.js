@@ -18,7 +18,8 @@ const PORT = process.env.PORT || 5050;
 // ✅ Middlewares - Place CORS and JSON parser first
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://client-5yhfrth0g-mohameds-projects-7178de3c.vercel.app'
+  'https://client-5yhfrth0g-mohameds-projects-7178de3c.vercel.app',
+  'https://www.aptmeuble.com'
 ];
 
 app.use(cors({
