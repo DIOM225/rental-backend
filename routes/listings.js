@@ -117,6 +117,32 @@ router.post('/:id/contact-click', async (req, res) => {
       res.status(500).json({ message: 'Erreur tracking click' });
     }
   });
+  // 📝 Add a review to a listing
+router.post('/:id/reviews', verifyToken, async (req, res) => {
+  try {
+    const listing = await Listing.findById(req.params.id);
+    if (!listing) return res.status(404).json({ message: 'Listing not found' });
+
+    const { rating } = req.body;
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ message: 'Invalid rating value' });
+    }
+
+    const review = {
+      rating,
+      user: req.user.id,
+    };
+
+    listing.reviews.push(review);
+    await listing.save();
+
+    res.json(listing);
+  } catch (err) {
+    console.error('❌ Error submitting review:', err);
+    res.status(500).json({ message: 'Erreur lors de l’ajout de la note' });
+  }
+});
+
   
 
 module.exports = router;

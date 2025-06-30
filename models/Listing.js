@@ -35,6 +35,11 @@ const listingSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    discountPrice: {
+      type: Number,
+      default: null,
+    },
+    
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
